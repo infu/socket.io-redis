@@ -27,9 +27,23 @@ interface Request {
 }
 
 export interface RedisAdapterOptions {
+  /**
+   * the name of the key to pub/sub events on as prefix
+   * @default socket.io
+   */
   key: string;
+  /**
+   * the redis client to publish events on
+   */
   pubClient: any;
+  /**
+   * the redis client to subscribe to events on
+   */
   subClient: any;
+  /**
+   * after this timeout the adapter will stop waiting from responses to request
+   * @default 5000
+   */
   requestsTimeout: number;
 }
 
@@ -52,8 +66,9 @@ function createRedisClient(uri, opts) {
  * @public
  */
 export function createAdapter(uri: string, opts?: Partial<RedisAdapterOptions>);
+export function createAdapter(opts: Partial<RedisAdapterOptions>);
 export function createAdapter(
-  uri?: string,
+  uri?: any,
   opts: Partial<RedisAdapterOptions> = {}
 ) {
   // handle options only
