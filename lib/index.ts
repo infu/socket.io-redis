@@ -1,5 +1,4 @@
 import uid2 = require("uid2");
-import { createClient } from "redis";
 import msgpack = require("notepack.io");
 import { Adapter, BroadcastOptions, Room, SocketId } from "socket.io-adapter";
 
@@ -49,14 +48,7 @@ export interface RedisAdapterOptions {
   requestsTimeout: number;
 }
 
-function createRedisClient(uri, opts) {
-  if (uri) {
-    // handle uri string
-    return createClient(uri, opts);
-  } else {
-    return createClient(opts);
-  }
-}
+
 
 /**
  * Returns a redis Adapter class.
@@ -108,8 +100,8 @@ export class RedisAdapter extends Adapter {
     super(nsp);
 
     this.uid = uid2(6);
-    this.pubClient = opts.pubClient || createRedisClient(uri, opts);
-    this.subClient = opts.subClient || createRedisClient(uri, opts);
+    this.pubClient = opts.pubClient;
+    this.subClient = opts.subClient;
     this.requestsTimeout = opts.requestsTimeout || 5000;
 
     const prefix = opts.key || "socket.io";
